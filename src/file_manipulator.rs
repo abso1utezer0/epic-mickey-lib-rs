@@ -1,12 +1,9 @@
-use std::io::Cursor;
+// file_manipulator.rs
+// © 2024 Epic Mickey Library
+
 use std::io::Write;
 use std::fs::File;
 use std::io::Read;
-use std::io::Seek;
-use std::io::SeekFrom;
-use std::mem::size_of;
-use std::convert::TryInto;
-use std::ops::BitOr;
 
 #[derive(Clone, Copy, PartialEq)]
 pub enum EndianType {
