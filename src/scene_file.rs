@@ -1,4 +1,7 @@
-use std::{fs::File, io::{Read, Write}, str::FromStr};
+// scene_file.rs
+// © 2024 Epic Mickey Library
+
+use std::{io::{Read, Write}, str::FromStr};
 use serde_json;
 use crate::file_manipulator;
 

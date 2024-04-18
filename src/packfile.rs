@@ -1,3 +1,6 @@
+// packfile.rs
+// © 2024 Epic Mickey Library
+
 use std::{fs::File, io::{Read, Write}};
 use serde_json;
 
@@ -149,12 +152,12 @@ impl Packfile {
         let mut data_pointer = fm.r_u32();
         data_pointer += header_size;
         let mut current_data_position = data_pointer;
-        fm.seek(header_size.try_into().unwrap());
+        fm.seek(header_size as usize);
         let num_files = fm.r_u32();
         let string_pointer = (num_files * 24) + header_size + 4;
         let current_header_position = header_size + 4;
 
-        fm.seek(current_header_position.try_into().unwrap());
+        fm.seek(current_header_position as usize);
 
         for _ in 0..num_files {
             let real_data_size = fm.r_u32();
@@ -173,10 +176,10 @@ impl Packfile {
 
             let current_header_position = fm.tell() as u32;
 
-            fm.seek(folder_pointer.try_into().unwrap());
+            fm.seek(folder_pointer as usize);
             let folder = fm.r_str_null();
 
-            fm.seek(file_pointer.try_into().unwrap());
+            fm.seek(file_pointer as usize);
             let file_name = fm.r_str_null();
 
             let path: String;
@@ -186,7 +189,7 @@ impl Packfile {
                 path = folder.to_owned() + "/" + &file_name;
             }
 
-            fm.seek(current_data_position.try_into().unwrap());
+            fm.seek(current_data_position as usize);
 
 
             let mut data = vec![0; compressed_data_size as usize];
@@ -207,7 +210,7 @@ impl Packfile {
             self.files.push(virtual_file);
 
             current_data_position += aligned_data_size;
-            fm.seek(current_header_position.try_into().unwrap());
+            fm.seek(current_header_position as usize);
         }
     }
 
@@ -247,7 +250,7 @@ impl Packfile {
         }
         fm.w_u32(data_pointer - header_size);
 
-        fm.seek(header_size.try_into().unwrap());
+        fm.seek(header_size as usize);
 
         fm.w_u32(self.files.len() as u32);
 
@@ -274,7 +277,7 @@ impl Packfile {
         }
         // write the path partition
         fm.write(&path_partition_fm.get_data());
-        fm.seek(data_pointer.try_into().unwrap());
+        fm.seek(data_pointer as usize);
         // pad to 32 bytes
         while fm.size() % 32 != 0 {
             fm.write(&vec![0]);

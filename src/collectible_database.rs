@@ -1,3 +1,6 @@
+// collectible_database.rs
+// © 2024 Epic Mickey Library
+
 use std::{fs::File, io::{Read, Write}};
 use serde_json;
 use crate::file_manipulator;
