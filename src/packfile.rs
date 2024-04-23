@@ -230,11 +230,11 @@ impl VirtualFile {
 /// A packfile that can store multiple VirtualFiles.
 pub struct Packfile {
     /// The magic of the packfile (should be " KAP").
-    magic: EndianDependentString,
+    pub magic: EndianDependentString,
     /// The version of the packfile (should be 2).
-    version: u32,
+    pub version: u32,
     /// The VirtualFiles stored in the packfile.
-    files: Vec<VirtualFile>
+    pub files: Vec<VirtualFile>
 }
 
 impl Packfile {

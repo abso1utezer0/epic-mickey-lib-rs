@@ -18,10 +18,10 @@ pub enum WriteMode {
 }
 
 pub struct FileManipulator {
-    endian: EndianType,
-    write_mode: WriteMode,
-    data: Vec<u8>,
-    pos: usize,
+    pub endian: EndianType,
+    pub write_mode: WriteMode,
+    pub data: Vec<u8>,
+    pub pos: usize,
 }
 
 impl FileManipulator {
