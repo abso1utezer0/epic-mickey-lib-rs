@@ -4,8 +4,8 @@
 extern crate flate2;
 extern crate serde_json;
 
-mod collectible_database;
-mod dct;
-mod file_manipulator;
-mod packfile;
-mod scene_file;
+pub mod collectible_database;
+pub mod dct;
+pub mod file_manipulator;
+pub mod packfile;
+pub mod scene_file;
