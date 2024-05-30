@@ -527,7 +527,7 @@ impl Property {
         }
     }
 
-    fn read_value_for_type(fm: &mut file_manipulator::FileManipulator, value_type: &str) -> serde_json::Value {
+    fn read_value_for_type(fm: &mut file_manipulator::FileManipulator, value_type: &str, version: SceneFileVersion) -> serde_json::Value {
         match value_type {
             "Boolean" => {
                 return serde_json::Value::Bool(fm.r_bool());
@@ -549,7 +549,14 @@ impl Property {
             },
             "String" => {
                 // read pointer
-                let pointer = fm.r_u32();
+                let mut pointer = fm.r_u32();
+                // if its version 2 proto or version 2, add 4 to the pointer
+                match version {
+                    SceneFileVersion::Version2Prototype | SceneFileVersion::Version2 => {
+                        pointer += 4;
+                    },
+                    _ => {}
+                }
                 let pos = fm.tell();
                 // seek to pointer
                 fm.seek(pointer as usize);
@@ -720,12 +727,12 @@ impl Property {
             true => {
                 let mut list = Vec::new();
                 for _ in 0..amount {
-                    list.push(Property::read_value_for_type(fm, &self.class_name));
+                    list.push(Property::read_value_for_type(fm, &self.class_name, version.clone()));
                 }
                 serde_json::Value::Array(list)
             },
             false => {
-                Property::read_value_for_type(fm, &self.class_name)
+                Property::read_value_for_type(fm, &self.class_name, version.clone())
             }
         };
     }
